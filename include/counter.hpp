@@ -45,12 +45,12 @@ size_t Counter<T>::m_count = 0;
 
 
 /*============================================================================*/
-/*                                  Class Counter                             */
+/*                                 Class Counter                              */
 /*============================================================================*/
 /*                               ~~~~~~~~~~~~~~~~~                            */
 /*                               special functions                            */
 /*                               ~~~~~~~~~~~~~~~~~                            */
-/*  									                   Constructor / ctor */
+/*                                                         Constructor / ctor */
 /*                                                         ~~~~~~~~~~~~~~~~~~ */
 template<typename T>
 Counter<T>::Counter()
@@ -59,7 +59,7 @@ Counter<T>::Counter()
 }
                                                                     
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*  									                    Destructor / dtor */
+/*                                                          Destructor / dtor */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
 template<typename T>
 Counter<T>::Counter(const Counter& other)
@@ -70,7 +70,7 @@ Counter<T>::Counter(const Counter& other)
 /*============================================================================*/
 /*                     API functions / Public member functions                */
 /*============================================================================*/
-/*  									                            FUnctionE */
+/*                                                                  get_count */
 /*                                                                  ~~~~~~~~~ */
 template<typename T>
 size_t Counter<T>::get_count()
