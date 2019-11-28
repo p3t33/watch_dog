@@ -39,9 +39,6 @@ static void Unit_test_update_time(void);
 static void unit_test_get_time_to_execute(void);
 static void unit_test_get_uid(void);
 
-/*                                                           Integration Test */ 
-/*                                                           ~~~~~~~~~~~~~~~~ */  
-   
 /*============================================================================*/
 /*                                                              User function */
 /*                                                              ~~~~~~~~~~~~~ */
