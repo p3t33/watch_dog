@@ -8,7 +8,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 27.11.19
-* Last update: 27.11.19
+* Last update: 28.11.19
 *******************************************************************************/
 
 /*============================================================================*/
@@ -23,7 +23,7 @@
 
 // This is an auxilary class used to provide a count identifier for UID class.
 // There is no dtor (which would decrease m_count by 1) because all is needed is
-// a unique identifier for each created object of type UID.
+// a unique count identifier for each created object of type UID.
 namespace med
 {
 
