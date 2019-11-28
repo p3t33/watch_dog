@@ -41,13 +41,12 @@ m_uid(),
 m_task_function(act_func),
 m_act_time(0),
 m_interval(interval)
-
 {}
                                                          
 /*============================================================================*/
 /*                     API functions / Public member functions                */
 /*============================================================================*/
-/*  									                              execute */
+/*                                                                    execute */
 /*                                                                    ~~~~~~~ */
 int STask::execute()
 {

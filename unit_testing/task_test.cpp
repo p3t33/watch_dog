@@ -141,6 +141,8 @@ static void unit_test_get_uid(void)
 /*                                   User function                            */             
 /*============================================================================*/
 /*                                                                            */
+/*                                                                  UserPrint */
+/*                                                                  ~~~~~~~~~ */
 int UserPrint(void *param)
 {
     UNUSED(param); 
