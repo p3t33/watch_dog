@@ -34,7 +34,7 @@ using namespace med;
 /*                             ~~~~~~~~~~~~~~~~~~~                            */
 /*                                                                 Unit tests */
 /*                                                                 ~~~~~~~~~~ */
-static void unit_test_run(void);
+static void unit_test_execute(void);
 static void Unit_test_update_time(void);
 static void unit_test_get_time_to_execute(void);
 static void unit_test_get_uid(void);
@@ -48,7 +48,7 @@ int UserPrint(void* param);
 
 int main()
 {
-    unit_test_run();
+    unit_test_execute();
     Unit_test_update_time();
     unit_test_get_time_to_execute();
     unit_test_get_uid();
@@ -59,11 +59,11 @@ int main()
 /*============================================================================*/
 /*                                  unit_tests                                */
 /*============================================================================*/
-/*                                                              unit_test_run */
-/*                                                              ~~~~~~~~~~~~~ */
-static void unit_test_run(void)
+/*                                                          unit_test_execute */
+/*                                                          ~~~~~~~~~~~~~~~~~ */
+static void unit_test_execute(void)
 {  
-    std::cout << "================= unit_test_run ================"<< std::endl;
+    std::cout << "============= unit_test_execute ================"<< std::endl;
 
     std::cout << "One task will be executed "
               <<  "# All glory to the Hypnotoad # should be printed on screen"
