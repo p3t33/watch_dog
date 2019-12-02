@@ -34,7 +34,7 @@ public:
     Counter();
     Counter(const Counter& other);
 
-    static size_t get_count();
+    size_t get_count();
 
 private:
     static size_t m_count;

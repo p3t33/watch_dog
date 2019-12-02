@@ -16,8 +16,8 @@
 /*                                                      standard  directories */
 /*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
 #include <iostream>
-#include <assert.h> /* assert */
-#include <unistd.h> /* getpid */
+#include <assert.h> // assert
+#include <unistd.h> // getpid
 /*============================================================================*/
 /*                                                          local directories */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
