@@ -6,7 +6,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 28.11.19
+* Last update: 3.12.19
 *******************************************************************************/
 
 
@@ -43,6 +43,11 @@ m_act_time(0),
 m_interval(interval)
 {}
 
+
+bool STask::operator==(STask& other) const
+{
+    return (m_uid == other.m_uid);
+}
 /*============================================================================*/
 /*                     API functions / Public member functions                */
 /*============================================================================*/

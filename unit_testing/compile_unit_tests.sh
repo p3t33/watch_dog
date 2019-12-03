@@ -12,7 +12,7 @@ task_test.cpp \
 ../task.cpp
 
 # priority_queue.hpp
-g++ -std=c++11 -pedantic-errors -Wall -Wextra -g -o pq_test.out \
+g++ -std=c++11 -pedantic-errors -Wall -Wextra -g -o priority_queue_test.out \
 ../uid.cpp \
 ../task.cpp \
 priority_queue_test.cpp

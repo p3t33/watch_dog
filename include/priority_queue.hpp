@@ -8,11 +8,14 @@
 * #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 2.12.19
+* Last update: 3.12.19
 *******************************************************************************/
 // std::priority_queue does not provide all of the necessary functionally
-// such as random accsess the std::vector it uses and so this class was
-// implemented.  
+// such as random accsess to the std::vector it uses, nor does id support the
+// the option to provide a costum compare function to the heap algorethem it
+// uses (I need the minimum element on the top and std::priority_queue sorts 
+// by maximum by default). And so this class was implemented.  
+
 /*============================================================================*/
 /*                                  Definitions                               */
 /*============================================================================*/
@@ -30,6 +33,7 @@
 /*                                                          ~~~~~~~~~~~~~~~~~ */
 #include "task.hpp"
 #include "uid.hpp"
+
 /*============================================================================*/
 namespace med
 {
@@ -42,10 +46,16 @@ class PQ
                                          std::shared_ptr<T> data_2)>;
     using is_match_t = std::function<bool(std::shared_ptr<T> data_1,
                                           std::shared_ptr<T> data_2)>;
+    using print_data_t = 
+                   std::function<void(std::vector<std::shared_ptr<T>>& vector)>;
 
     public:
-        PQ(compare_t compare_func, is_match_t is_match_func);
+        PQ(compare_t compare_func,
+           is_match_t is_match_func,
+           print_data_t print_data_func);
 
+        // Interface / API
+        // ---------------------------------------------------------------------
         void enqueue(std::shared_ptr<T> data);
         std::shared_ptr<T> dequeue();
         std::shared_ptr<T> remove(std::shared_ptr<T> data_to_remove);
@@ -53,15 +63,19 @@ class PQ
         bool is_empty();
         size_t size();
         void clear();
+        void print_row_data();
 
-        std::vector<T>* get_row_data();
 
-
-        std::vector<std::shared_ptr<T>> m_priority_queue;
- 
     private:
+        // managing variables
+        // ---------------------------------------------------------------------
+        std::vector<std::shared_ptr<T>> m_priority_queue;
+
+        // Generic function provided by the user
+        // ---------------------------------------------------------------------
         compare_t m_compare_func;
         is_match_t m_is_match_func;
+        print_data_t m_print_data_func;
 };
 
 /*============================================================================*/
@@ -73,10 +87,13 @@ class PQ
 /*                                                         Constructor / ctor */
 /*                                                         ~~~~~~~~~~~~~~~~~~ */
 template <typename T>
-PQ<T>::PQ(compare_t compare_func, is_match_t is_match_func):
-m_priority_queue{},
-m_compare_func(compare_func),
-m_is_match_func(is_match_func)
+PQ<T>::PQ(compare_t compare_func,
+          is_match_t is_match_func,
+          print_data_t print_data_func):
+                                              m_priority_queue{},
+                                              m_compare_func(compare_func),
+                                              m_is_match_func(is_match_func),
+                                              m_print_data_func(print_data_func)
 {}
 
 /*============================================================================*/
@@ -124,9 +141,7 @@ std::shared_ptr<T> PQ<T>::remove(std::shared_ptr<T> data_to_remove)
 
     for (size_t i = 0; i < size; ++i)
     {
-        if (0 == memcmp ((void*)(m_priority_queue[i].get()),
-                         (void*)(data_to_remove.get()),
-                         sizeof(T)))
+        if (*(m_priority_queue[i]) == *(data_to_remove))
         {
             temp = m_priority_queue[i];
             m_priority_queue.erase(m_priority_queue.begin() + i);
@@ -179,9 +194,9 @@ void PQ<T>::clear()
 }
 
 template <typename T>
-std::vector<T>* PQ<T>::get_row_data()
+void PQ<T>::print_row_data()
 {
-    //return (m_priority_queue[0])
+    m_print_data_func(m_priority_queue);
 }
 
 }

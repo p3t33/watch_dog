@@ -6,7 +6,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 27.11.19
-* Last update: 27.11.19
+* Last update: 3.zzz.19
 *******************************************************************************/
 
 
@@ -41,14 +41,10 @@ UID::UID(): m_pid(getpid()), m_time{}, m_identification_number(0)
     gettimeofday(&m_time, NULL);
     m_identification_number = m_counter.get_count();
 }
-                                                                    
-/*============================================================================*/
-/*                     API functions / Public member functions                */
-/*============================================================================*/
-/*                                                                is_same_id */
-/*                                                                 ~~~~~~~~~~ */
 
-bool UID::is_same_id(UID& other)
+/*                                                                 operator== */
+/*                                                                 ~~~~~~~~~~ */
+bool UID::operator==(UID& other) const
 {
     if(m_pid == other.m_pid &&
        m_time.tv_sec == other.m_time.tv_sec &&
@@ -59,9 +55,10 @@ bool UID::is_same_id(UID& other)
     }
 
     return (false);      
-}
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+}                                                                  
+/*============================================================================*/
+/*                     API functions / Public member functions                */
+/*============================================================================*/
 /*                                                                  is_bad_id */
 /*                                                                  ~~~~~~~~~ */
 bool UID::is_bad_id()

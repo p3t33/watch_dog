@@ -5,10 +5,10 @@
 *                             =====================
 * File Name: uid.hpp
 * Related files: uid.cpp counter.hpp
-* #Version: V 1.0
+* #Version: V 1.3
 * Writer: Kobi Medrish       
 * Created: 27.11.19
-* Last update: 27.11.19
+* Last update: 3.12.19
 *******************************************************************************/
 
 
@@ -39,12 +39,16 @@ class UID
 
     public:
         UID();
-        
-        bool is_same_id(UID& other);
+        bool operator==(UID& other) const;
+
+        // Interface / API
+        // ---------------------------------------------------------------------
         bool is_bad_id();
         void print_uid();
 
     private:
+        // managing variables
+        // ---------------------------------------------------------------------
         pid_t m_pid; 
         timeval m_time; 
         size_t m_identification_number;
