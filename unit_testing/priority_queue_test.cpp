@@ -51,13 +51,11 @@ static void unit_test_peek(void);
 // Functions for PQ<STask>
 // ~~~~~~~~~~~~~~~~~~~~~~~
 bool compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two);
-bool is_match_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two);
 void print_task_uid(std::vector<std::shared_ptr<STask>>& vector);
 
 // Functions for PQ<size_t>
 // ~~~~~~~~~~~~~~~~~~~~~~~~
 bool compare_size_t(std::shared_ptr<size_t> one, std::shared_ptr<size_t> two);
-bool is_match_size_t(std::shared_ptr<size_t> one, std::shared_ptr<size_t> two);
 void print_size_t(std::vector<std::shared_ptr<size_t>>& vector);
 
 int user_print(void *param); // used for STask
@@ -86,7 +84,7 @@ static void unit_test_enqueue(void)
     size_t arr[] = {1,8,5,6,3,4,0,9,7,2};
 
     std::cout <<"~~~~~~~~~~ test enqueue for size_t type ~~~~~~~~" << std::endl;
-    PQ<size_t> pq(compare_size_t, is_match_size_t, print_size_t);
+    PQ<size_t> pq(compare_size_t, print_size_t);
     for (size_t i = 0; i < 10; ++i)
     {
         pq.enqueue(std::make_shared<size_t>(arr[i]));
@@ -97,7 +95,7 @@ static void unit_test_enqueue(void)
     std::cout << std::endl;
 
     std::cout <<"~~~~~~~~~~~~~ test enqueue for objects ~~~~~~~~~" << std::endl;
-    PQ<STask> pq_task(compare_task, is_match_task, print_task_uid);
+    PQ<STask> pq_task(compare_task, print_task_uid);
     pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 5)));
     pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 10)));
     pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 15)));
@@ -126,7 +124,7 @@ static void unit_test_dequeue(void)
     size_t arr[] = {1,8,5,6,3,4,9,7,2};
 
     std::cout <<"~~~~~~~~~~ test dequeue for size_t type ~~~~~~~~" << std::endl;
-    PQ<size_t> pq(compare_size_t, is_match_size_t, print_size_t);
+    PQ<size_t> pq(compare_size_t, print_size_t);
     for (size_t i = 0; i < 9; ++i)
     {
         pq.enqueue(std::make_shared<size_t>(arr[i]));
@@ -166,7 +164,7 @@ static void unit_test_remove(void)
     size_t arr[] = {1,8,5,6,3,4,9,7,2};
 
     std::cout <<"~~~~~~~~~~ test remove for size_t type ~~~~~~~~" << std::endl;
-    PQ<size_t> pq(compare_size_t, is_match_size_t, print_size_t);
+    PQ<size_t> pq(compare_size_t, print_size_t);
     for (size_t i = 0; i < 9; ++i)
     {
         pq.enqueue(std::make_shared<size_t>(arr[i]));
@@ -185,7 +183,7 @@ static void unit_test_remove(void)
               << std::endl;
 
     std::cout <<"~~~~~~~~~~ test remove for STask ~~~~~~~~" << std::endl;
-    PQ<STask> pq_task(compare_task, is_match_task, print_task_uid);
+    PQ<STask> pq_task(compare_task, print_task_uid);
     pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 5)));
     pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 10)));
     pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 15)));
@@ -225,7 +223,7 @@ static void unit_test_peek(void)
     size_t arr[] = {1,8,5,6,3,4,9,7,2};
 
     std::cout <<"~~~~~~~~~~ test remove for size_t type ~~~~~~~~" << std::endl;
-    PQ<size_t> pq(compare_size_t, is_match_size_t, print_size_t);
+    PQ<size_t> pq(compare_size_t, print_size_t);
     for (size_t i = 0; i < 9; ++i)
     {
         pq.enqueue(std::make_shared<size_t>(arr[i]));
@@ -249,19 +247,11 @@ static void unit_test_peek(void)
 /*                                   User function                            */             
 /*============================================================================*/
 /*                                                                            */
-/*                                                            is_match_size_t */
-/*                                                            ~~~~~~~~~~~~~~~ */        
-bool is_match_size_t(std::shared_ptr<size_t> one, std::shared_ptr<size_t> two)
-{
-    return ((one.get() == two.get()) ? true : false);
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*                                                             compare_size_t */
 /*                                                             ~~~~~~~~~~~~~~ */ 
 bool compare_size_t(std::shared_ptr<size_t> one, std::shared_ptr<size_t> two)
 {
-    return ((one.get() > two.get()));    
+    return ((*(one.get()) > *(two.get())));    
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -273,19 +263,6 @@ void print_size_t(std::vector<std::shared_ptr<size_t>>& vector)
     {
         std::cout << *(i.get());
     }  
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                              is_match_task */
-/*                                                              ~~~~~~~~~~~~~ */ 
-bool is_match_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two)
-{
-    if (0 == memcmp(one.get(), two.get(), sizeof(STask)))
-    {
-        return (true);
-    }
-
-    return (false);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

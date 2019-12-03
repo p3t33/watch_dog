@@ -43,7 +43,7 @@ class STask
         // Interface / API
         // ---------------------------------------------------------------------
         int execute();
-        void update_time(); // with current time + interval
+        void update_time_to_execute(); // with current time + interval
         time_t get_time_to_execute();
         UID& get_uid();
 

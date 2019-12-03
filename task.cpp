@@ -59,9 +59,9 @@ int STask::execute()
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                update_time */
-/*                                                                ~~~~~~~~~~~ */
-void STask::update_time()
+/*                                                     update_time_to_execute */
+/*                                                     ~~~~~~~~~~~~~~~~~~~~~~ */
+void STask::update_time_to_execute()
 {
     m_act_time = time(nullptr) + m_interval;
 }

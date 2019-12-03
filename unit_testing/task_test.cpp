@@ -35,7 +35,7 @@ using namespace med;
 /*                                                                 Unit tests */
 /*                                                                 ~~~~~~~~~~ */
 static void unit_test_execute(void);
-static void Unit_test_update_time(void);
+static void Unit_test_update_time_to_execute(void);
 static void unit_test_get_time_to_execute(void);
 static void unit_test_get_uid(void);
 static void unit_test_operator_equal(void);
@@ -50,7 +50,7 @@ int user_print(void* param);
 int main()
 {
     unit_test_execute();
-    Unit_test_update_time();
+    Unit_test_update_time_to_execute();
     unit_test_get_time_to_execute();
     unit_test_get_uid();
     unit_test_operator_equal();
@@ -80,11 +80,11 @@ static void unit_test_execute(void)
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                      Unit_test_update_time */
-/*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
-static void Unit_test_update_time(void)
+/*                                           Unit_test_update_time_to_execute */
+/*                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+static void Unit_test_update_time_to_execute(void)
 {
-    std::cout << "================== Unit_test_update_time ===================="
+    std::cout << "=========== Unit_test_update_time_to_execute ================"
               << std::endl;    
 
     STask task(user_print, 5);
@@ -93,13 +93,13 @@ static void Unit_test_update_time(void)
             << task.get_time_to_execute()
             << std::endl;
 
-    task.update_time();
+    task.update_time_to_execute();
 
     std::cout << "time after first update: "
                 << task.get_time_to_execute()
                 << std::endl;
     sleep(1);
-    task.update_time();
+    task.update_time_to_execute();
 
     std::cout << "time after second update: "
                 << task.get_time_to_execute()

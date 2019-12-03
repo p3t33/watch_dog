@@ -42,17 +42,15 @@ template <typename T>
 class PQ
 {
     private:
-    using compare_t = std::function<bool(std::shared_ptr<T> data_1,
-                                         std::shared_ptr<T> data_2)>;
-    using is_match_t = std::function<bool(std::shared_ptr<T> data_1,
-                                          std::shared_ptr<T> data_2)>;
-    using print_data_t = 
+        using compare_t = std::function<bool(std::shared_ptr<T> data_1,
+                                             std::shared_ptr<T> data_2)>;
+        using is_match_t = std::function<bool(std::shared_ptr<T> data_1,
+                                              std::shared_ptr<T> data_2)>;
+        using print_data_t = 
                    std::function<void(std::vector<std::shared_ptr<T>>& vector)>;
 
     public:
-        PQ(compare_t compare_func,
-           is_match_t is_match_func,
-           print_data_t print_data_func);
+        PQ(compare_t compare_func, print_data_t print_data_func);
 
         // Interface / API
         // ---------------------------------------------------------------------
@@ -74,7 +72,6 @@ class PQ
         // Generic function provided by the user
         // ---------------------------------------------------------------------
         compare_t m_compare_func;
-        is_match_t m_is_match_func;
         print_data_t m_print_data_func;
 };
 
@@ -88,11 +85,9 @@ class PQ
 /*                                                         ~~~~~~~~~~~~~~~~~~ */
 template <typename T>
 PQ<T>::PQ(compare_t compare_func,
-          is_match_t is_match_func,
           print_data_t print_data_func):
                                               m_priority_queue{},
                                               m_compare_func(compare_func),
-                                              m_is_match_func(is_match_func),
                                               m_print_data_func(print_data_func)
 {}
 
@@ -193,6 +188,9 @@ void PQ<T>::clear()
     m_priority_queue.clear();
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                             print_row_data */
+/*                                                             ~~~~~~~~~~~~~~ */
 template <typename T>
 void PQ<T>::print_row_data()
 {
