@@ -48,17 +48,17 @@ static void unit_test_peek(void);
 /*============================================================================*/
 /*                                                              User function */
 /*                                                              ~~~~~~~~~~~~~ */
-// Functions for PQ<STask>
+// Functions for PQ<STask<size_t>>
 // ~~~~~~~~~~~~~~~~~~~~~~~
-bool compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two);
-void print_task_uid(std::vector<std::shared_ptr<STask>>& vector);
+bool compare_task(std::shared_ptr<STask<size_t>> one, std::shared_ptr<STask<size_t>> two);
+void print_task_uid(std::vector<std::shared_ptr<STask<size_t>>>& vector);
 
 // Functions for PQ<size_t>
 // ~~~~~~~~~~~~~~~~~~~~~~~~
 bool compare_size_t(std::shared_ptr<size_t> one, std::shared_ptr<size_t> two);
 void print_size_t(std::vector<std::shared_ptr<size_t>>& vector);
 
-int user_print(void *param); // used for STask
+int user_print(void *param); // used for STask<size_t>
 /*============================================================================*/
 
 int main()
@@ -95,12 +95,12 @@ static void unit_test_enqueue(void)
     std::cout << std::endl;
 
     std::cout <<"~~~~~~~~~~~~~ test enqueue for objects ~~~~~~~~~" << std::endl;
-    PQ<STask> pq_task(compare_task, print_task_uid);
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 5)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 10)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 15)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 20)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 25)));
+    PQ<STask<size_t>> pq_task(compare_task, print_task_uid);
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 5)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 10)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 15)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 20)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 25)));
 
     pq_task.print_row_data();
 
@@ -182,19 +182,19 @@ static void unit_test_remove(void)
     std::cout << "item that was removed: " << *(temp.get()) << std::endl
               << std::endl;
 
-    std::cout <<"~~~~~~~~~~ test remove for STask ~~~~~~~~" << std::endl;
-    PQ<STask> pq_task(compare_task, print_task_uid);
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 5)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 10)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 15)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 20)));
-    pq_task.enqueue(std::shared_ptr<STask> (new STask(user_print, 25)));
+    std::cout <<"~~~~~~~~~~ test remove for STask<size_t> ~~~~~~~~" << std::endl;
+    PQ<STask<size_t>> pq_task(compare_task, print_task_uid);
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 5)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 10)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 15)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 20)));
+    pq_task.enqueue(std::shared_ptr<STask<size_t>> (new STask<size_t>(user_print, 25)));
 
-    std::cout <<"~~~~~~~ list of STask objects in the pq ~~~~" << std::endl;
+    std::cout <<"~~~~~~~ list of STask<size_t> objects in the pq ~~~~" << std::endl;
     pq_task.print_row_data();
 
-    std::shared_ptr<STask> temp_2 = pq_task.peek();
-    std::shared_ptr<STask> temp_3 = pq_task.remove(temp_2); 
+    std::shared_ptr<STask<size_t>> temp_2 = pq_task.peek();
+    std::shared_ptr<STask<size_t>> temp_3 = pq_task.remove(temp_2); 
 
     std::cout <<"~~~~~~~~~~~~~~ list of STask objects in the pq after "
               << "object with counter 8 was removed  ~~~~~~~~~~~~" << std::endl;
@@ -268,7 +268,7 @@ void print_size_t(std::vector<std::shared_ptr<size_t>>& vector)
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*                                                               compare_task */
 /*                                                               ~~~~~~~~~~~~ */ 
-bool compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two)
+bool compare_task(std::shared_ptr<STask<size_t>> one, std::shared_ptr<STask<size_t>> two)
 {
     return ((one.get()->get_time_to_execute() >
              two.get()->get_time_to_execute()) ?
@@ -278,7 +278,7 @@ bool compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two)
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*                                                             print_task_uid */
 /*                                                             ~~~~~~~~~~~~~~ */ 
-void print_task_uid(std::vector<std::shared_ptr<STask>>& vector)
+void print_task_uid(std::vector<std::shared_ptr<STask<size_t>>>& vector)
 {
     for (auto i : vector)
     {

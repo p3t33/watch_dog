@@ -3,10 +3,10 @@
 *                             =====================
 * File Name: task_test.cpp
 * Related files: task.cpp task.hpp
-* #Version: V 1.1
+* #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 3.12.19
+* Last update: 5.12.19
 *******************************************************************************/
 
 
@@ -72,7 +72,7 @@ static void unit_test_execute(void)
               <<  "# All glory to the Hypnotoad # should be printed on screen"
               << std::endl;
 
-    STask task(user_print, 5);
+    STask<size_t> task(user_print, 5);
     task.execute();
 
     std::cout << "================================================"<< std::endl
@@ -87,7 +87,7 @@ static void Unit_test_update_time_to_execute(void)
     std::cout << "=========== Unit_test_update_time_to_execute ================"
               << std::endl;    
 
-    STask task(user_print, 5);
+    STask<size_t> task(user_print, 5);
 
     std::cout << "current time after ctor should be zero: " 
             << task.get_time_to_execute()
@@ -119,7 +119,7 @@ static void unit_test_get_time_to_execute(void)
     std::cout << "=============== unit_test_get_time_to_execute ==============="
               << std::endl;    
     
-    STask task(user_print, 5);
+    STask<size_t> task(user_print, 5);
     std::cout << "current time after ctor should be zero: " 
               << task.get_time_to_execute()
               << std::endl;
@@ -138,7 +138,7 @@ static void unit_test_get_uid(void)
     std::cout << "======================== unit_test_get_uid =================="
               << std::endl;    
     
-    STask task(user_print, 5);
+    STask<size_t> task(user_print, 5);
     task.get_uid().print_uid();
 
     std::cout << "============================================================="
@@ -155,8 +155,8 @@ static void unit_test_operator_equal(void)
     std::cout << "================= unit_test_operator_equal =================="
               << std::endl;    
     
-    STask task_1(user_print, 5);
-    STask task_2(user_print, 10);
+    STask<size_t> task_1(user_print, 5);
+    STask<size_t> task_2(user_print, 10);
 
 
     std::cout << "~~~~~~~~~ task_1 == task_2 test ~~~~~~~~~~~~~~~" << std::endl;

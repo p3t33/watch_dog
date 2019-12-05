@@ -8,7 +8,7 @@
 * #Version: V 1.3
 * Writer: Kobi Medrish       
 * Created: 27.11.19
-* Last update: 3.12.19
+* Last update: 5.12.19
 *******************************************************************************/
 
 
@@ -52,6 +52,7 @@ class UID
         pid_t m_pid; 
         timeval m_time; 
         size_t m_identification_number;
+        
 };
 
 } // namespace med

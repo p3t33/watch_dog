@@ -5,10 +5,10 @@
 *                             =====================
 * File Name: scheduler.hpp
 * Related files: scheduler.cpp scheduler_test.cpp
-* #Version: V 1.0
+* #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 28.11.19
+* Last update: 05.12.19
 *******************************************************************************/
 
 
@@ -44,8 +44,10 @@ class Scheduler
 
         // Interface / API
         // ---------------------------------------------------------------------
-        void add_task(task_function_t act_func, size_t interval);
-        std::shared_ptr<STask> remove_task(std::shared_ptr<STask> task_to_remove);
+        UID& add_task(task_function_t act_func,
+                                      size_t interval);
+        std::shared_ptr<STask<size_t>> remove_task(std::shared_ptr<STask<size_t>> 
+                                           task_to_remove);
         int execute_schedule();
         void stop();
         size_t get_number_of_tasks();
@@ -55,10 +57,12 @@ class Scheduler
         // managing variables
         // ---------------------------------------------------------------------
         int m_kill_flag;
-        PQ<STask> m_pqueue;
+        PQ<STask<size_t>> m_pqueue;
 
-        static bool compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two);
-        static void print_task_uid(std::vector<std::shared_ptr<STask>>& vector);
+        static bool compare_task(std::shared_ptr<STask<size_t>> one,
+                                 std::shared_ptr<STask<size_t>> two);
+        static void 
+            print_task_uid(std::vector<std::shared_ptr<STask<size_t>>>& vector);
 };
 
 } // namespace med

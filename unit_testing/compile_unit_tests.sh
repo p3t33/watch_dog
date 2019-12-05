@@ -9,16 +9,15 @@ uid_test.cpp \
 g++ -std=c++11 -pedantic-errors -Wall -Wextra -g -o task_test.out \
 task_test.cpp \
 ../uid.cpp \
-../task.cpp
+
 
 # priority_queue test
 g++ -std=c++11 -pedantic-errors -Wall -Wextra -g -o priority_queue_test.out \
 ../uid.cpp \
-../task.cpp \
 priority_queue_test.cpp
 
 # scheduler test
 g++ -std=c++11 -pedantic-errors -Wall -Wextra -g -o scheduler_test.out \
 ../uid.cpp \
-../task.cpp \
-priority_queue_test.cpp
+../scheduler.cpp \
+scheduler_test.cpp

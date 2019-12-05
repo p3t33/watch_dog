@@ -5,10 +5,10 @@
 *                             =====================
 * File Name: priority_queue.hpp
 * Related files: priority_queue_test.cpp
-* #Version: V 1.2
+* #Version: V 1.3
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 3.12.19
+* Last update: 5.12.19
 *******************************************************************************/
 // std::priority_queue does not provide all of the necessary functionally
 // such as random accsess to the std::vector it uses, nor does id support the
@@ -54,7 +54,7 @@ class PQ
 
         // Interface / API
         // ---------------------------------------------------------------------
-        void enqueue(std::shared_ptr<T> data);
+        std::shared_ptr<T> enqueue(std::shared_ptr<T> data);
         std::shared_ptr<T> dequeue();
         std::shared_ptr<T> remove(std::shared_ptr<T> data_to_remove);
         std::shared_ptr<T> peek();
@@ -97,13 +97,19 @@ PQ<T>::PQ(compare_t compare_func,
 /*                                                                    enqueue */
 /*                                                                    ~~~~~~~ */
 template <typename T>
-void PQ<T>::enqueue(std::shared_ptr<T> data)
+std::shared_ptr<T> PQ<T>::enqueue(std::shared_ptr<T> data)
 {
     // adds a new element to the vector
     m_priority_queue.push_back(data);
+
+    // after an object is added to m_priority_queue is returned to the
+    // a smart pointer to the object inside the underlying vector is returrend
+    std::shared_ptr<T> temp = m_priority_queue.back();
+
     //pushes the last element in the vector onto the valid heap over the range      
     std::push_heap(m_priority_queue.begin(),
                    m_priority_queue.end(), m_compare_func);
+    return (temp);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

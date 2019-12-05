@@ -1,17 +1,13 @@
-/****************************************************************
-*                       
-* 						=====================
-* File Name: template_code_cpp.cpp
-* #Version: V 1.3.1
+/*******************************************************************************
+*                                    scheduler
+*                             =====================
+* File Name: scheduler.cpp
+* Related files: scheduler.hpp scheduler_test.cpp
+* #Version: V 1.1
 * Writer: Kobi Medrish       
-* Reviewer:    
-* Created: 16.5.19
-* Last update: 16.9.19
-****************************************************************/
-
-
-
-
+* Created: 28.11.19
+* Last update: 5.12.19
+*******************************************************************************/
 
 /*============================================================================*/
 /*                                  Definitions                               */
@@ -25,22 +21,9 @@
 /*                                                          ~~~~~~~~~~~~~~~~~ */
 #include "./include/scheduler.hpp"
 
-/*============================================================================*/
-/*                                                                     Macros */
-/*                                                                     ~~~~~~ */
 
-
-/*============================================================================*/
-/*                                                                      enums */
-/*                                                                      ~~~~~ */
-
-
-/*============================================================================*/
-/*                                                                    structs */
-/*                                                                    ~~~~~~~ */
 namespace med
 {
-
 
 /*============================================================================*/
 /*                                Class scheduler                             */
@@ -54,76 +37,37 @@ Scheduler::Scheduler():
 m_kill_flag(0), m_pqueue(Scheduler::compare_task, Scheduler::print_task_uid)
 {}
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                          Destructor / dtor */
-/*                                                          ~~~~~~~~~~~~~~~~~ */
-
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                   Copy Constructor / cctor */
-/*                                                   ~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                            copy assignment */
-/*                                                            ~~~~~~~~~~~~~~~ */
-
-/*============================================================================*/
-/*                               ~~~~~~~~~~~~~~~~                             */
-/*                               member functions                             */
-/*                               ~~~~~~~~~~~~~~~~                             */
-
-
-/*============================================================================*/
-/*                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                        */
-/*                        friend / operators functions                        */
-/*                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                        */
-
-
-
-
-
-
 /*============================================================================*/
 /*                     API functions / Public member functions                */
 /*============================================================================*/
-/*                                                                  FUnctionE */
-/*                                                                  ~~~~~~~~~ */
-void Scheduler::add_task(task_function_t act_func, size_t interval)
+/*                                                                   add_task */
+/*                                                                   ~~~~~~~~ */
+UID& Scheduler::add_task(task_function_t act_func,
+                                           size_t interval)
 {
-    m_pqueue.enqueue(std::shared_ptr<STask> (new STask(act_func, interval)));
+    std::shared_ptr<STask<size_t>> temp = m_pqueue.enqueue(std::shared_ptr<STask<size_t>> 
+                                               (new STask<size_t>(act_func, interval)));
+    return (temp.get()->get_uid());
 }
 
-/*--------------------------------------------------------------------------- */
-/*                      Auxiliary functions for FUnctionE                     */
-/*--------------------------------------------------------------------------- */
-/*                                                                  FUnctionE */
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  FUnctionF */
-/*                                                                  ~~~~~~~~~ */
-std::shared_ptr<STask> 
-Scheduler::remove_task(std::shared_ptr<STask> task_to_remove)
+/*                                                                remove_task */
+/*                                                                ~~~~~~~~~~~ */
+std::shared_ptr<STask<size_t>> 
+Scheduler::remove_task(std::shared_ptr<STask<size_t>> task_to_remove)
 {
-    std::shared_ptr<STask> temp = m_pqueue.remove(task_to_remove);
+    std::shared_ptr<STask<size_t>> temp = m_pqueue.remove(task_to_remove);
     return (temp);
 }
 
-/*--------------------------------------------------------------------------- */
-/*                      Auxiliary functions for FUnctionF                     */
-/*--------------------------------------------------------------------------- */
-/*                                                                  FUnctionF */
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  FUnctionG */
-/*                                                                  ~~~~~~~~~ */
+/*                                                           execute_schedule */
+/*                                                           ~~~~~~~~~~~~~~~~ */
 int Scheduler::execute_schedule()
 {
     
     int i = 0, temp_size = 0, enqueue_status = 0;
-    std::shared_ptr<STask> temp_task_handle = nullptr;
+    std::shared_ptr<STask<size_t>> temp_task_handle = nullptr;
 
     size_t queue_size = this->get_number_of_tasks();
 
@@ -169,35 +113,25 @@ int Scheduler::execute_schedule()
     return (1);
 }
 
-/*--------------------------------------------------------------------------- */
-/*                      Auxiliary functions for FUnctionG                     */
-/*--------------------------------------------------------------------------- */
-/*                                                                  FUnctionG */
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  FUnctionH */
-/*                                                                  ~~~~~~~~~ */
+/*                                                                       stop */
+/*                                                                       ~~~~ */
 void Scheduler::stop()
 {
     m_kill_flag = 1;
 }
 
-/*--------------------------------------------------------------------------- */
-/*                      Auxiliary functions for FUnctionH                     */
-/*--------------------------------------------------------------------------- */
-/*                                                                  FUnctionH */
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  FUnctionI */
-/*                                                                  ~~~~~~~~~ */
+/*                                                        get_number_of_tasks */
+/*                                                        ~~~~~~~~~~~~~~~~~~~ */
 size_t Scheduler::get_number_of_tasks()
 {
     return (m_pqueue.size());
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  FUnctionI */
-/*                                                                  ~~~~~~~~~ */
+/*                                                                   is_empty */
+/*                                                                   ~~~~~~~~ */
 bool Scheduler::is_empty()
 {
     return (m_pqueue.is_empty());
@@ -207,7 +141,8 @@ bool Scheduler::is_empty()
 /*                                                               compare_task */
 /*                                                               ~~~~~~~~~~~~ */ 
 bool 
-Scheduler::compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two)
+Scheduler::compare_task(std::shared_ptr<STask<size_t>> one,
+                        std::shared_ptr<STask<size_t>> two)
 {
     return ((one.get()->get_time_to_execute() >
              two.get()->get_time_to_execute()) ?
@@ -217,7 +152,8 @@ Scheduler::compare_task(std::shared_ptr<STask> one, std::shared_ptr<STask> two)
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*                                                             print_task_uid */
 /*                                                             ~~~~~~~~~~~~~~ */ 
-void Scheduler::print_task_uid(std::vector<std::shared_ptr<STask>>& vector)
+void Scheduler::
+print_task_uid(std::vector<std::shared_ptr<STask<size_t>>>& vector)
 {
     for (auto i : vector)
     {
