@@ -6,7 +6,7 @@
 * #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 5.12.19
+* Last update: 8.12.19
 *******************************************************************************/
 
 
@@ -24,9 +24,11 @@
 using namespace med;
 
 /*============================================================================*/
-/*                                                                     Macros */
+/*                                                                     Colors */
 /*                                                                     ~~~~~~ */
-#define UNUSED(x) (void)(x);
+const char* const green = "\033[1;32m";
+const char* const red = "\033[1;32m";
+const char* const reset = "\033[0m"; 
 
 /*============================================================================*/
 /*                             ~~~~~~~~~~~~~~~~~~~                            */
@@ -43,7 +45,7 @@ static void unit_test_operator_equal(void);
 /*============================================================================*/
 /*                                                              User function */
 /*                                                              ~~~~~~~~~~~~~ */
-int user_print(void* param);
+int user_print(void);
 
 /*============================================================================*/
 
@@ -162,21 +164,21 @@ static void unit_test_operator_equal(void)
     std::cout << "~~~~~~~~~ task_1 == task_2 test ~~~~~~~~~~~~~~~" << std::endl;
     if (task_1 == task_2)
     {
-        std::cout << "operator== FAIL" << std::endl;
+        std::cout << "operator== " << red << "FAIL" << reset<< std::endl;
     }
     else
     {
-        std::cout << "operator== SUCCESS" << std::endl;
+        std::cout << "operator== "<< green << "SUCCESS"  << reset << std::endl;
     }
 
     std::cout << "~~~~~~~~~ task_1 == task_1 test ~~~~~~~~~~~~~~~" << std::endl;
     if (task_1 == task_1)
     {
-        std::cout << "operator== SUCCESS" << std::endl;    
+        std::cout << "operator== "<< green << "SUCCESS"  << reset << std::endl;    
     }
     else 
     {
-        std::cout << "operator== FAIL" << std::endl;
+        std::cout << "operator== " << red << "FAIL" << reset<< std::endl;
     }
     
     std::cout << "============================================================="
@@ -191,10 +193,8 @@ static void unit_test_operator_equal(void)
 /*                                                                            */
 /*                                                                  user_print */
 /*                                                                  ~~~~~~~~~ */
-int user_print(void *param)
+int user_print(void)
 {
-    UNUSED(param); 
-
     printf("# All glory to the Hypnotoad #\n");
     
     return (0);

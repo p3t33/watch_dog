@@ -8,7 +8,7 @@
 * #Version: V 1.3
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 5.12.19
+* Last update: 8.12.19
 *******************************************************************************/
 
 
@@ -36,7 +36,7 @@ template <typename T>
 class STask
 {
     private:
-        using task_function_t = std::function<int(void* param)>;
+        using task_function_t = std::function<int(void)>;
     
     public:
         STask(task_function_t act_func, size_t interval);
@@ -53,7 +53,7 @@ class STask
         // managing variables
         // ---------------------------------------------------------------------
         UID m_uid;
-        task_function_t& m_task_function;
+        task_function_t m_task_func;
         time_t m_act_time;
 	    size_t m_interval; /* seconds */
         std::shared_ptr<T> m_task_param;
@@ -71,7 +71,7 @@ class STask
 template <typename T>
 STask<T>::STask(task_function_t act_func, size_t interval):
 m_uid(),
-m_task_function(act_func),
+m_task_func(act_func),
 m_act_time(0),
 m_interval(interval)
 {}
@@ -89,7 +89,7 @@ bool STask<T>::operator==(STask& other) const
 template <typename T>
 int STask<T>::execute()
 {
-    return (m_task_function(nullptr));
+    return (m_task_func());
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

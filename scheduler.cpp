@@ -6,7 +6,7 @@
 * #Version: V 1.1
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 5.12.19
+* Last update: 8.12.19
 *******************************************************************************/
 
 /*============================================================================*/
@@ -42,12 +42,14 @@ m_kill_flag(0), m_pqueue(Scheduler::compare_task, Scheduler::print_task_uid)
 /*============================================================================*/
 /*                                                                   add_task */
 /*                                                                   ~~~~~~~~ */
-UID& Scheduler::add_task(task_function_t act_func,
+std::shared_ptr<STask<size_t>> Scheduler::add_task(task_function_t act_func,
                                            size_t interval)
 {
-    std::shared_ptr<STask<size_t>> temp = m_pqueue.enqueue(std::shared_ptr<STask<size_t>> 
-                                               (new STask<size_t>(act_func, interval)));
-    return (temp.get()->get_uid());
+    std::shared_ptr<STask<size_t>> temp = 
+    m_pqueue.enqueue(std::shared_ptr<STask<size_t>> 
+                                       (new STask<size_t>(act_func, interval)));
+
+    return (temp);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -65,8 +67,8 @@ Scheduler::remove_task(std::shared_ptr<STask<size_t>> task_to_remove)
 /*                                                           ~~~~~~~~~~~~~~~~ */
 int Scheduler::execute_schedule()
 {
-    
-    int i = 0, temp_size = 0, enqueue_status = 0;
+
+    int enqueue_status = 0;
     std::shared_ptr<STask<size_t>> temp_task_handle = nullptr;
 
     size_t queue_size = this->get_number_of_tasks();
@@ -76,7 +78,7 @@ int Scheduler::execute_schedule()
     for (size_t i = 0; i < queue_size; ++i)
     {
         temp_task_handle = m_pqueue.dequeue();
-        temp_task_handle.get()->update_time_to_execute();
+        temp_task_handle->update_time_to_execute();
         m_pqueue.enqueue(temp_task_handle);
     }
 
@@ -88,29 +90,36 @@ int Scheduler::execute_schedule()
         if (true == this->is_empty())
         {
             return (0);
-        }
+        } 
 
-        sleep(m_pqueue.peek()->get_time_to_execute());
-
+        sleep(m_pqueue.peek()->get_time_to_execute() - time(NULL));
 
         /* Task to be executed is removed from the queue */
         temp_task_handle = m_pqueue.dequeue();
 
-        /* Task is executed and dealt with based on its return status */ 
-        if (0 == temp_task_handle.get()->execute())
+        switch (temp_task_handle.get()->execute())
         {
-            temp_task_handle.get()->update_time_to_execute();
-            m_pqueue.enqueue(temp_task_handle);
-        }
-        else
-        {
-            /* In case task is to be run once or it is failed to run is is
-            destroyed */ 
-            temp_task_handle = nullptr;    
+            case 1:
+            {
+                temp_task_handle = nullptr;
+                break;
+            }
+   
+            case -1:
+            {
+                m_kill_flag = -1;
+                break;
+            }
+        
+            default:
+            {
+                temp_task_handle.get()->update_time_to_execute();
+                m_pqueue.enqueue(temp_task_handle); 
+            }
         }
     }
 
-    return (1);
+    return (0);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -118,7 +127,7 @@ int Scheduler::execute_schedule()
 /*                                                                       ~~~~ */
 void Scheduler::stop()
 {
-    m_kill_flag = 1;
+    m_kill_flag = -1;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -159,6 +168,14 @@ print_task_uid(std::vector<std::shared_ptr<STask<size_t>>>& vector)
     {
         i.get()->get_uid().print_uid();
     }  
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                            get_top_task */
+/*                                                            ~~~~~~~~~~~~~~~ */ 
+void Scheduler::get_top_task()
+{
+    m_pqueue.peek();
 }
 
 } // namespace hrd9

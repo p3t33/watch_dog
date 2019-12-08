@@ -8,7 +8,7 @@
 * #Version: V 1.3
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 5.12.19
+* Last update: 8.12.19
 *******************************************************************************/
 // std::priority_queue does not provide all of the necessary functionally
 // such as random accsess to the std::vector it uses, nor does id support the
@@ -163,8 +163,7 @@ std::shared_ptr<T> PQ<T>::remove(std::shared_ptr<T> data_to_remove)
 template <typename T>       
 std::shared_ptr<T> PQ<T>::peek()
 {
-    // return the top element of the heap
-    return (m_priority_queue.front());
+    return (m_priority_queue[0]);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
