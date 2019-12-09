@@ -8,7 +8,7 @@
 * #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 8.12.19
+* Last update: 9.12.19
 *******************************************************************************/
 
 
@@ -38,6 +38,9 @@ class Scheduler
 {
     private:
         using task_function_t = std::function<int(void)>;
+
+        static const int execute_task_once_and_remove_from_queue = 1;
+        static const int stop_execution_of_scheduler = -1;
 
     public:
         Scheduler();

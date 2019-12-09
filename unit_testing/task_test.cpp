@@ -6,7 +6,7 @@
 * #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 8.12.19
+* Last update: 9.12.19
 *******************************************************************************/
 
 
@@ -191,11 +191,10 @@ static void unit_test_operator_equal(void)
 /*                                   User function                            */             
 /*============================================================================*/
 /*                                                                            */
-/*                                                                  user_print */
-/*                                                                  ~~~~~~~~~ */
+/*                                                                 user_print */
+/*                                                                 ~~~~~~~~~~ */
 int user_print(void)
 {
-    printf("# All glory to the Hypnotoad #\n");
-    
+    std::cout << "# All glory to the Hypnotoad #" << std::endl;    
     return (0);
 } 

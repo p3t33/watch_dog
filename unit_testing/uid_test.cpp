@@ -6,26 +6,34 @@
 * #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 27.11.19
-* Last update: 3.12.19
+* Last update: 9.12.19
 *******************************************************************************/
+
 
 /*============================================================================*/
 /*                                  Definitions                               */
 /*============================================================================*/
 /*                                                      standard  directories */
 /*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
-#include <iostream>
+#include <iostream> // std::cout
 
 /*============================================================================*/
 /*                                                          local directories */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
 #include "../include/uid.hpp"
+using namespace med;
 
 /*============================================================================*/
 /*                                                                       enum */
 /*                                                                       ~~~~ */
 enum status {STATUS_SUCCESS, STATUS_FAIL};
-using namespace med;
+
+/*============================================================================*/
+/*                                                                     Colors */
+/*                                                                     ~~~~~~ */
+const char* const green = "\033[1;32m";
+const char* const red = "\033[1;32m";
+const char* const reset = "\033[0m"; 
 
 /*============================================================================*/
 /*                             ~~~~~~~~~~~~~~~~~~~                            */
@@ -47,6 +55,7 @@ int main()
   
     return (0);
 }
+
 
 /*============================================================================*/
 /*                                  unit_tests                                */
@@ -80,8 +89,15 @@ static void unit_test_is_same_id(void)
         result = STATUS_FAIL;
     }
 
-    std::cout << (result ? "Fail" : "Success") << std::endl;
-
+    if (STATUS_SUCCESS == result)
+    {
+        std::cout << green << "SUCCESS" << reset << std::endl;
+    }
+    else
+    {
+        std::cout << red << "FAILURE" << reset << std::endl;
+    }
+    
     std::cout << "============================================================="
               << std::endl
               << std::endl
@@ -110,9 +126,16 @@ static void unit_test_is_bad_id(void)
     if (true == uid2.is_bad_id())
     {
         result = STATUS_FAIL;
-    } 
+    }
 
-    std::cout << (result ? "Fail" : "Success") << std::endl;
+    if (STATUS_SUCCESS == result)
+    {
+        std::cout << green << "SUCCESS" << reset << std::endl;
+    }
+    else
+    {
+        std::cout << red << "FAILURE" << reset << std::endl;
+    } 
 
     std::cout << "============================================================="
               << std::endl

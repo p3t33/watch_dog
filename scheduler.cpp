@@ -6,8 +6,9 @@
 * #Version: V 1.1
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 8.12.19
+* Last update: 9.12.19
 *******************************************************************************/
+
 
 /*============================================================================*/
 /*                                  Definitions                               */
@@ -15,7 +16,7 @@
 /*                                                      standard  directories */
 /*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
 #include <iostream>
-#include <assert.h> /* assert */
+
 /*============================================================================*/
 /*                                                          local directories */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
@@ -43,12 +44,10 @@ m_kill_flag(0), m_pqueue(Scheduler::compare_task, Scheduler::print_task_uid)
 /*                                                                   add_task */
 /*                                                                   ~~~~~~~~ */
 std::shared_ptr<STask<size_t>> Scheduler::add_task(task_function_t act_func,
-                                           size_t interval)
+                                                   size_t interval)
 {
     std::shared_ptr<STask<size_t>> temp = 
-    m_pqueue.enqueue(std::shared_ptr<STask<size_t>> 
-                                       (new STask<size_t>(act_func, interval)));
-
+    m_pqueue.enqueue(std::make_shared<STask<size_t>>(act_func, interval));
     return (temp);
 }
 
@@ -67,8 +66,6 @@ Scheduler::remove_task(std::shared_ptr<STask<size_t>> task_to_remove)
 /*                                                           ~~~~~~~~~~~~~~~~ */
 int Scheduler::execute_schedule()
 {
-
-    int enqueue_status = 0;
     std::shared_ptr<STask<size_t>> temp_task_handle = nullptr;
 
     size_t queue_size = this->get_number_of_tasks();
@@ -92,29 +89,32 @@ int Scheduler::execute_schedule()
             return (0);
         } 
 
-        sleep(m_pqueue.peek()->get_time_to_execute() - time(NULL));
+        sleep(m_pqueue.peek()->get_time_to_execute() - time(nullptr));
 
-        /* Task to be executed is removed from the queue */
+        /* Task to be executed is removed from the queue and executed*/
         temp_task_handle = m_pqueue.dequeue();
 
         switch (temp_task_handle.get()->execute())
         {
-            case 1:
+            case execute_task_once_and_remove_from_queue: 
             {
                 temp_task_handle = nullptr;
                 break;
             }
    
-            case -1:
+            case stop_execution_of_scheduler:
             {
-                m_kill_flag = -1;
+                this->stop();
                 break;
             }
         
-            default:
+            // return value is 0, task time stamp is updated and it is inserted 
+            // back to the pq.
+            default: 
             {
                 temp_task_handle.get()->update_time_to_execute();
                 m_pqueue.enqueue(temp_task_handle); 
+                break;
             }
         }
     }

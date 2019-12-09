@@ -6,7 +6,7 @@
 * #Version: V 1.1
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 8.12.19
+* Last update: 9.12.19
 *******************************************************************************/
 
 // create and destroy tested via valgrind
@@ -15,18 +15,14 @@
 /*============================================================================*/
 /*                                                      standard  directories */
 /*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
-#include <iostream>
-#include <stdio.h> /* printf */
+#include <iostream> // std::cout
+
 /*============================================================================*/
 /*                                                          local directories */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
 #include "../include/scheduler.hpp"
 using namespace med;
-/*============================================================================*/
-/*                                                                     Macros */
-/*                                                                     ~~~~~~ */
-using namespace med;
- 
+
 /*============================================================================*/
 /*                                                                     Colors */
 /*                                                                     ~~~~~~ */
@@ -44,46 +40,42 @@ static void unit_test_add_task(void);
 static void Unit_test_remove_task(void);
 static void unit_test_execute_schedule(void);
 
-/*                                                           Integration Test */ 
-/*                                                           ~~~~~~~~~~~~~~~~ */  
-   
 /*============================================================================*/
 /*                                                              User function */
 /*                                                              ~~~~~~~~~~~~~ */
-int UserPrint(void);
-int UserPrintOnce(void);
+int user_print(void);
+int user_print_once(void);
 int poison_pill_task(void);
+
 /*============================================================================*/
 
 int main()
 {
-/*     unit_test_add_task();
-    Unit_test_remove_task(); */
+    unit_test_add_task();
+    Unit_test_remove_task();
     unit_test_execute_schedule();
-
-  
     return (0);
 }
 
 /*============================================================================*/
 /*                                 unit_test_s                                */
 /*============================================================================*/
-/*                                                              unit_test_add_task */
-/*                                                              ~~~~~~~~~~~~~ */
+/*                                                         unit_test_add_task */
+/*                                                         ~~~~~~~~~~~~~~~~~~ */
 
 static void unit_test_add_task(void)
 {  
-    std::cout << "======================== unit_test_add_task ======================"
+    std::cout << "==================== unit_test_add_task ====================="
               << std::endl;
     
     Scheduler scheduler;
-    std::shared_ptr<STask<size_t>> task_uid = scheduler.add_task(UserPrint, 5);
+    std::shared_ptr<STask<size_t>> task_uid = scheduler.add_task(user_print, 5);
     task_uid.get()->execute();
 
     std::cout << "print out of the UID of the added task" << std::endl;
            
     task_uid.get()->get_uid().print_uid();
-    task_uid = scheduler.add_task(UserPrintOnce, 10);
+    task_uid = scheduler.add_task(user_print_once, 10);
     task_uid.get()->get_uid().print_uid();
 
     if (2 == scheduler.get_number_of_tasks())
@@ -97,7 +89,7 @@ static void unit_test_add_task(void)
                   << std::endl;
     }
 
-    if (true == scheduler.is_empty())
+    if (false == scheduler.is_empty())
     {
         std::cout << "queue of tasks is not empty " 
                   << green << "SUCCESS" << reset
@@ -105,7 +97,7 @@ static void unit_test_add_task(void)
     }
     else
     {
-        std::cout << "queue of tasks is not empty " 
+        std::cout << "queue of tasks is not empty "
                   << red << "FAILURE" << reset
                   << std::endl;
     }
@@ -116,15 +108,18 @@ static void unit_test_add_task(void)
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  Unit_test_remove_task */
-/*                                                                  ~~~~~~~~~ */
+/*                                                      Unit_test_remove_task */
+/*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
 static void Unit_test_remove_task(void)
 {
-    std::cout << "========================= Unit_test_remove_task ======================="
+    std::cout << "===================== Unit_test_remove_task ================="
               << std::endl;    
     
     Scheduler scheduler;
-    std::shared_ptr<STask<size_t>> task_1 (new STask<size_t>(UserPrintOnce, 5));
+
+    std::shared_ptr<STask<size_t>> 
+    task_1 (std::make_shared<STask<size_t>>(user_print_once, 5));
+
     
     if (nullptr == scheduler.remove_task(task_1))
     {
@@ -139,9 +134,9 @@ static void Unit_test_remove_task(void)
                   << std::endl; 
     }
     
-    std::shared_ptr<STask<size_t>> task_2 = scheduler.add_task(UserPrint, 5);
+    std::shared_ptr<STask<size_t>> task_2 = scheduler.add_task(user_print, 5);
     std::shared_ptr<STask<size_t>> 
-                                 task_3 = scheduler.add_task(UserPrintOnce, 10);
+                               task_3 = scheduler.add_task(user_print_once, 10);
     
 
     if (2 == scheduler.get_number_of_tasks())
@@ -208,42 +203,21 @@ static void Unit_test_remove_task(void)
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                                  unit_test_execute_schedule */
-/*                                                                  ~~~~~~~~~ */
+/*                                                 unit_test_execute_schedule */
+/*                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 static void unit_test_execute_schedule(void)
 {
-    std::cout << "============== unit_test_execute_schedule ================"<< std::endl;    
+    std::cout << "============ unit_test_execute_schedule ========"<< std::endl;    
    
     Scheduler scheduler;
 
-    printf("===================== SCHRun print log ====================\n\n");
+    std::cout <<"~~~~~~~~~~~~~~~ schedule printout ~~~~~~~~~~~~~~~"<< std::endl;    
 
-    //scheduler.add_task(UserPrintOnce, 10);
-/*     scheduler.add_task(UserPrint, 5);
-    scheduler.add_task(UserPrintOnce, 15); */
-
-/*     if (0 == scheduler.execute_schedule())
-    {
-        std::cout << "empty scheduler run as expected " 
-                  << green << "SUCCESS" << reset
-                  << std::endl;    
-    }
-    else
-    {
- 
-        std::cout << "empty scheduler run as expected " 
-                  << green << "FAILURE" << reset
-                  << std::endl;    
-
-    } */
-    
-    scheduler.add_task(UserPrintOnce, 8);
-    scheduler.add_task(UserPrint, 2);
+    scheduler.add_task(user_print, 5);
+    scheduler.add_task(user_print_once, 2);
     scheduler.add_task(poison_pill_task, 20);
 
-
     scheduler.execute_schedule();
-
 
     std::cout << "============================================================="
               << std::endl
@@ -252,35 +226,35 @@ static void unit_test_execute_schedule(void)
 }
 
 
-
 /*============================================================================*/
-/*                                   User function                            */             
+/*                                  User function                             */             
 /*============================================================================*/
-/*                                                                            */
-int UserPrintOnce(void)
+/*                                                            user_print_once */
+/*                                                            ~~~~~~~~~~~~~~~ */
+int user_print_once(void)
 {
-    printf("This massage should be printed only once\n");   
+    std::cout << "This massage should be first and printed only once"
+              << std::endl;
 
-    /* Return value of <1> will execute this task only once */
     return (1);
 }
 
-
-int UserPrint(void)
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                                 user_print */
+/*                                                                 ~~~~~~~~~~ */
+int user_print(void)
 {
-    printf("# All glory to the Hypnotodd #\n");
-    
-    /* Return value of <0> will execute this task indefinitely */
+    std::cout << "This massage should be printed indefinitely"
+              << std::endl;
     return (0);
 } 
-  
 
-// int UserPrintInt(void *param)
-
-/* Will stop the scheduler by flipping the kill switch */
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*                                                           poison_pill_task */
+/*                                                           ~~~~~~~~~~~~~~~~ */  
 int poison_pill_task(void)
 {
-    std::cout << "time to stop the scheduler" << std::endl;
+    std::cout << " this task stops the execution of scheduler" << std::endl;
 
     return (-1);
 } 
