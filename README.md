@@ -1,56 +1,76 @@
-# Data structures
+# Watch dog
 
-This repository contains several implementations (in c and c++) of common data structures, each one has a folder and an API. All data structures were tested and preform as expected to the best of my knowledge, if you encounter a bug please let me know. 
+The watch dog is a service for monitoring a process and making sure it executes
+properly, in case the monitored process fails to do so due to a crash the 
+watch dog is responsible to lunch the process again. 
 
-All stable and tested code is located on the master branch and all unfinished / untested code is located on the development branch.
+In my implementations I had two extra objectives
+* usually only a small part of the process code is critical, and so there should
+be an option to activate the watch dog just before entering the critical
+section and disabling it just after it is over instead of monitoring the entire
+execution of the process.
+* In some rare cases the watch dog itself may crush and the monitored process
+should be able to relaunch it again. the process and the watch dog should keep
+each other safe.
 
-## Compilers and operating system
-* Development was on ubuntu 18.04 LTS OS.
-* Source code was compiled with:
-    - for C - GNU gcc (v7.4) and clang (v6.0), std=99
-    - for C++ - GNU g++ (v7.4) and clang++ (v6.0), std=11
+There are 4 main files to this implementation
+* **client.cpp** - will be compiled to a binary that is the monitored process,
+    it will have some critical section to be monitored by the watch dog.
+* **watch_dog_process.cpp** - will be compiled to a binary that is the watch dog
+    service that will run in parallel with client.cpp and keep it safe.  
+* **watch_dog.cpp** - is the API of the watch dog. 
+* **life_checker.cpp** - is a shared library that is used to synchronies between
+    client.out and watch_dog_process.out
+      - big part of the synchronization is done by **scheduler.cpp** class that
+        schedules the execution of tasks. client.out and watch_dog_process.out
+        each has one and use its task to send and handle signals.
+
+
+### Next on the Todo list
+
+- [x] life checker
+  - [ ] synchronization logic
+  - [x]<del> implement scheduler</del> 
+    - [x]<del> Task</del> 
+      - [x]<del> UID + counter</del> 
+      - [x]<del> priority queue</del> 
+- [ ] client
+- [ ] watch dog process
+- [ ] watch dog API
+- [ ] To add UML diagram.
+
+
+### Getting Started
+clone the project by typing in the command line:
+```bash
+git clone https://github.com/p3t33/watch_dog.git
+```
+
+### Compiling and running the server and clients
+In order to compile source code to binary and run the 3 clients and server: 
+```sh
+./compile_and_run.sh
+```
+to compile ony:
+```sh
+./compile.sh
+```
+
+unit testing is available at ./unit_testing, to compile them:
+```sh
+./compile_unit_tests.sh
+```
+run each individual .out file to run the specific unit test.
+
+
+### Compilers and operating systems
+* Development was done on ubuntu 18.04 LTS OS.
+* Source code was compiled with GNU g++ v7.4 and clang++ v6.0.0, std=11
 * Tested for memory leaks using Valgrind v3.13.0
-  
 
-## Getting Started
+### Authors
 
-1. Clone the repository by typing in the command line:
-```
-  git clone https://github.com/p3t33/data_structures.git
-```
+**Kobi Medrish** - [p3t33](https://github.com/p3t33)
 
-2. Compile the source code:
-run the following bash script to compile all test files 
-```
-  ./compile_source.sh
-```
- 
-Optional:
-
-clean up all binaries by running:
-```
-  ./clean_up.sh
-```   
-
-## Running the tests
-After compiling source code with ./compile_source.sh bash script. Each data structure folder will contain binary .out file, running it will run the unit test for the specific data structure.  
-
-For example, for stack data structure:
-```
-  ./stack/stack_test.out
-```
-
-## Versioning
-
-Each API has version and date of last update.
-
-## Authors
-
-* **Kobi Medrish**  -  [github](https://github.com/p3t33)
-
-## License
-
+### License
 Licensed under the [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html) license.
-
-
-# watch_dog
