@@ -8,7 +8,7 @@
 * #Version: V 1.2
 * Writer: Kobi Medrish       
 * Created: 28.11.19
-* Last update: 9.12.19
+* Last update: 11.12.19
 *******************************************************************************/
 
 
@@ -63,6 +63,7 @@ class Scheduler
         int m_kill_flag;
         PQ<STask<size_t>> m_pqueue;
 
+        // task that are provided to PQ class
         static bool compare_task(std::shared_ptr<STask<size_t>> one,
                                  std::shared_ptr<STask<size_t>> two);
         static void 
