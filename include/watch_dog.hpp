@@ -35,17 +35,22 @@ class WatchDog
 {
     private:
     enum semaphore_type {CLIENT, WATCH_DOG};
+    static const size_t buffer_size = 50;
 
     public:
         WatchDog(char *client_args[]);
-        ~WatchDog();
+
 
         // Interface / API
         // ---------------------------------------------------------------------
         int keep_me_alive();
         void let_me_die();
 
+
     private:
+
+         int create_watch_dog_checker_thread();
+         void check_watch_dog(void *arg);
         // managing variables
         // ---------------------------------------------------------------------
         LifeChecker* m_life_checker;
@@ -54,6 +59,7 @@ class WatchDog
         pid_t m_pid_wd;
         int m_return_val_thread_func;
         int m_is_first_run;
+        sem_t m_thread_sem; // TODO: condition variole
 
 };
 
