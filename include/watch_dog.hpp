@@ -50,7 +50,7 @@ class WatchDog
     private:
 
          int create_watch_dog_checker_thread();
-         void check_watch_dog(void *arg);
+         void check_watch_dog();
         // managing variables
         // ---------------------------------------------------------------------
         LifeChecker* m_life_checker;

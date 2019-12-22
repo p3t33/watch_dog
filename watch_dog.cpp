@@ -54,7 +54,8 @@ WatchDog::WatchDog(char *client_args[]):
                   m_pid_wd(),
                   m_return_val_thread_func(0),
                   m_is_first_run(1), // 1 = first run
-                  thread_sem()
+                  m_thread_sem() 
+            
 
 {
 
@@ -190,15 +191,16 @@ void WatchDog::let_me_die()
 int WatchDog::create_watch_dog_checker_thread()
 {
     int status = 1;  
-    
     m_thread = std::thread(&WatchDog::check_watch_dog, this);
+    
+   // m_thread = std::thread(&WatchDog::check_watch_dog, this);
  
 
     sem_post(&m_thread_sem);
     
     return (0);
 }
-void WatchDog::check_watch_dog(void *arg)
+void WatchDog::check_watch_dog()
 {
 
  
