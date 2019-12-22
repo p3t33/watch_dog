@@ -265,6 +265,8 @@ void LifeChecker::siguser1_handler(int signal_number,
                 << getpid()
                 << "got signal number "
                 << signal_number
+                << sending_signal_info->si_signo
+                << data
                 << std::endl;
 }
 
@@ -277,6 +279,8 @@ void LifeChecker::siguser2_handler(int signal_number,
                 << getpid()
                 << "got signal number "
                 << signal_number
+                << sending_signal_info->si_signo
+                << data
                 << std::endl;
 }
 

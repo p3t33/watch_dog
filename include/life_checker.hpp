@@ -37,6 +37,7 @@
 namespace med
 {
 
+//TODO: without the static I have multiply definition.
 sig_atomic_t revive_threshold = 5;
 
 class LifeChecker

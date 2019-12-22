@@ -132,7 +132,7 @@ int WatchDog::keep_me_alive()
         m_pid_wd = getppid();
     }
 
-    create_watch_dog_checker_thread();    
+    return(create_watch_dog_checker_thread());    
 }
 
 
@@ -190,7 +190,6 @@ void WatchDog::let_me_die()
 /*                                                                  FUnctionI */
 int WatchDog::create_watch_dog_checker_thread()
 {
-    int status = 1;  
     m_thread = std::thread(&WatchDog::check_watch_dog, this);
     
    // m_thread = std::thread(&WatchDog::check_watch_dog, this);
