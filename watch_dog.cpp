@@ -132,7 +132,8 @@ int WatchDog::keep_me_alive()
         m_pid_wd = getppid();
     }
 
-    return(create_watch_dog_checker_thread());    
+    create_watch_dog_checker_thread();
+    
 }
 
 

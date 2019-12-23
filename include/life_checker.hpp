@@ -33,12 +33,13 @@
 #include "scheduler.hpp"
 
 /*============================================================================*/
+//sig_atomic_t revive_threshold = 5;
+
 
 namespace med
 {
 
 //TODO: without the static I have multiply definition.
-sig_atomic_t revive_threshold = 5;
 
 class LifeChecker
 {
@@ -48,7 +49,7 @@ class LifeChecker
 
     static const size_t buffer_length = 50;
     // number of times the partner on the other side have not sent a signal
-    //static const size_t revive_threshold = 5;
+
 
 /*     static constexpr const char* file_name = "./watch_dog_proc.out";
     static constexpr const  char* watch_dog_sem = "/watch_dog_sem";
@@ -114,4 +115,5 @@ class LifeChecker
 };
 
 } // namespace med
+
 #endif // _LIFE_CHECKER_

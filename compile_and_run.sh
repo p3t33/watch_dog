@@ -19,12 +19,16 @@ ar -t libar.a
 
 # compile binary to be used as the watch dog process 
 g++ -std=c++11 -pedantic-errors -Wall -Wextra -g \
-watch_dog_exec.cpp -o watch_dog_exec.out life.so libar.a -pthread
+watch_dog_exec.cpp -o \
+watch_dog_exec.out life.so libar.a -pthread
 
 
 # compile binary to be used as the client that is wattched bt the watch dog process
 g++ -std=c++11 -pedantic-errors -Wall -Wextra -g \
+-o client.out \
 client.cpp watch_dog.cpp scheduler.cpp uid.cpp life_checker.cpp -pthread
+
+# remove object files
 rm *.o
 
 export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH

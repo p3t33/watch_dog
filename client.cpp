@@ -10,7 +10,9 @@
 
 #include <stdio.h> /* printf */
 #include <unistd.h> /* sleep */
+#include <iostream> // std::cout
 #include "./include/watch_dog.hpp" 
+
 
 using namespace med;
 
@@ -23,8 +25,9 @@ int main(int argc, char *argv[])
 
     WatchDog watch_dog(argv);
 
-    // start of critical code section
+    std::cout << "start of keep me alive" << std::endl;
     watch_dog.keep_me_alive();
+    std::cout << "keep me alive is activated" << std::endl;
 
     printf("start client\n");
     while(1)

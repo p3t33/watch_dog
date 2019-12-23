@@ -25,6 +25,7 @@
 
 namespace med
 {
+sig_atomic_t revive_threshold = 5;
 /*============================================================================*/
 /*                                                   static memers definition */
 /*                                                   ~~~~~~~~~~~~~~~~~~~~~~~~ */
