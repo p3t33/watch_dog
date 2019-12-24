@@ -6,7 +6,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 9.12.19
-* Last update: 11.12.19
+* Last update: 24.12.19
 *******************************************************************************/
 
 
@@ -16,6 +16,7 @@
 /*                                                      standard  directories */
 /*                                                      ~~~~~~~~~~~~~~~~~~~~~ */
 #include <iostream>
+#include <stdio.h>
 /*============================================================================*/
 /*                                                          local directories */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
@@ -23,14 +24,9 @@
 /*============================================================================*/
 /*                                                                     Macros */
 /*                                                                     ~~~~~~ */
-#define ENV_WATCH_DOG_PID "ENV_WATCH_DOG_PID"
 #define BUF_LEN 50
 #define DEC_BASE 10
-#define WATCH_DOG_EXEC "./watch_dog_exec.out"
 
-/*============================================================================*/
-/*                                                                      enums */
-/*                                                                      ~~~~~ */
 
 
 /*============================================================================*/
@@ -38,6 +34,12 @@
 /*                                                                    ~~~~~~~ */
 namespace med
 {
+/*============================================================================*/
+/*                                                   static memers definition */
+/*                                                   ~~~~~~~~~~~~~~~~~~~~~~~~ */
+const std::string WatchDog::watch_dog_environment_variable_name = "ENV_WATCH_DOG_PID";
+const std::string WatchDog::watch_dog_executable_name = "./watch_dog_exec.out";
+
 
 /*============================================================================*/
 /*                                  Class name                                */
@@ -54,7 +56,7 @@ WatchDog::WatchDog(char *client_args[]):
                   m_pid_wd(),
                   m_return_val_thread_func(0),
                   m_is_first_run(1), // 1 = first run
-                  m_thread_sem() 
+                  m_thread_sem{0}
             
 
 {
@@ -63,65 +65,30 @@ WatchDog::WatchDog(char *client_args[]):
 
 }
 
-        // Interface / API
-        // ---------------------------------------------------------------------
-                          
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                          Destructor / dtor */
-/*                                                          ~~~~~~~~~~~~~~~~~ */
-
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                   Copy Constructor / cctor */
-/*                                                   ~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*                                                            copy assignment */
-/*                                                            ~~~~~~~~~~~~~~~ */
-
-/*============================================================================*/
-/*                               ~~~~~~~~~~~~~~~~                             */
-/*                               member functions                             */
-/*                               ~~~~~~~~~~~~~~~~                             */
-
-
-/*============================================================================*/
-/*                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                        */
-/*                        friend / operators functions                        */
-/*                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                        */
-
-
-
-
-
 
 /*============================================================================*/
 /*                     API functions / Public member functions                */
 /*============================================================================*/
 /*                                                                  FUnctionE */
 /*                                                                  ~~~~~~~~~ */
-int WatchDog::keep_me_alive()
+void WatchDog::keep_me_alive()
 {
-     char buff[buffer_size] = {0};
+    char buff[buffer_size] = {0};
     
 
-    if (NULL == getenv(ENV_WATCH_DOG_PID))/*first run - no watchdog is running*/
+    if (nullptr == getenv(watch_dog_environment_variable_name.c_str())) 
+    // if true this is the first run - no watchdog is running
     {
         m_is_first_run = 1;
 
         m_pid_wd = fork();
 
         sprintf(buff, "%d", m_pid_wd);
-        setenv(ENV_WATCH_DOG_PID, buff, 1);/*1(non-zero) to overwrite*/
+        setenv(watch_dog_environment_variable_name.c_str(), buff, 1);/*1(non-zero) to overwrite*/
 
         if (0 == m_pid_wd)  /* child --> watchdog */
         {
-            execv(WATCH_DOG_EXEC, (char **)m_client_args); 
+            execv(watch_dog_executable_name.c_str(), (char **)m_client_args); 
         }
     }
     else
@@ -192,9 +159,7 @@ void WatchDog::let_me_die()
 int WatchDog::create_watch_dog_checker_thread()
 {
     m_thread = std::thread(&WatchDog::check_watch_dog, this);
-    
-   // m_thread = std::thread(&WatchDog::check_watch_dog, this);
- 
+     
 
     sem_post(&m_thread_sem);
     
@@ -203,10 +168,9 @@ int WatchDog::create_watch_dog_checker_thread()
 void WatchDog::check_watch_dog()
 {
 
- 
     /* client's main thread must wait the thread that ping-pong with watchdog */
     sem_wait(&m_thread_sem); 
 
-    m_life_checker = new LifeChecker(m_pid_wd, m_client_args, WATCH_DOG_EXEC, m_is_first_run);
+    m_life_checker = new LifeChecker(m_pid_wd, m_client_args, watch_dog_executable_name.c_str(), m_is_first_run);
 }
 } // namespace med

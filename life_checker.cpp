@@ -6,7 +6,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 10.12.19
-* Last update: 10.12.19
+* Last update: 24.12.19
 *******************************************************************************/
 
 
@@ -18,11 +18,13 @@
 #include <signal.h> // sigaction
 #include <iostream> // std::cout
 #include <functional>
+#include <stdio.h>
 /*============================================================================*/
 /*                                                          local directories */
 /*                                                          ~~~~~~~~~~~~~~~~~ */
 #include "./include/life_checker.hpp" 
 
+#define UNUSED(x) (void)(x)
 namespace med
 {
 sig_atomic_t revive_threshold = 5;
@@ -30,8 +32,8 @@ sig_atomic_t revive_threshold = 5;
 /*                                                   static memers definition */
 /*                                                   ~~~~~~~~~~~~~~~~~~~~~~~~ */
 const std::string LifeChecker::file_name = "./watch_dog_proc.out";
-const std::string LifeChecker::watch_dog_sem = "/watch_dog_sem";
-const std::string LifeChecker::client_sem = "/client_sem";
+const std::string LifeChecker::watch_dog_sem_name = "/watch_dog_sem";
+const std::string LifeChecker::client_sem_name = "/client_sem";
 
 /*============================================================================*/
 /*                                  LifeChecker                               */
@@ -50,18 +52,22 @@ LifeChecker::LifeChecker(pid_t partner_pid,
                               m_partner_args(partner_args),
                               m_partner_exec_name(partner_exec_name),
                               m_name_semaphore{}
+                            
 {
     set_signal_handlers();
+    set_schedular_for_comunication();
+
     
     int return_value = SUCCESS;
 
-    if (0 != is_first_run)
+/*  if (0 != is_first_run)
     {
         return_value += wait_for_partner();
-    }
+    } */
 
+    
     return_value += m_scheduler.execute_schedule();
-
+    puts("scheduler executing");
 }
 
 /*============================================================================*/
@@ -104,14 +110,17 @@ void LifeChecker::set_signal_handlers(void)
     struct sigaction sigusr1 = {};
     struct sigaction sigusr2 = {};
 
-    // flags are restarted
-    sigusr1.sa_flags = SA_RESTART;
-    sigusr2.sa_flags = SA_RESTART;
+
 
     // all previous set signals to be blocked until signal handler is finished
-    // are removed
+    // are removed from the set 
     sigemptyset(&sigusr1.sa_mask);
     sigemptyset(&sigusr2.sa_mask);
+
+    // flags are restarted 
+    sigusr1.sa_flags = SA_RESTART | SA_SIGINFO;
+    sigusr2.sa_flags = SA_RESTART | SA_SIGINFO;
+
 
     // all desired signals to be blocked until signal handler is finished are
     // set. 
@@ -164,8 +173,8 @@ int LifeChecker::set_schedular_for_comunication(void)
 /*                                                                  ~~~~~~~~~ */
 int LifeChecker::wait_for_partner(void)
 {
-    m_name_semaphore[WATCH_DOG] = sem_open(watch_dog_sem.c_str(), O_CREAT, S_IRUSR | S_IWUSR, 0);
-    m_name_semaphore[CLIENT] = sem_open(client_sem.c_str(), O_CREAT, S_IRUSR | S_IWUSR, 0);
+    m_name_semaphore[WATCH_DOG] = sem_open(watch_dog_sem_name.c_str(), O_CREAT, S_IRUSR | S_IWUSR, 0);
+    m_name_semaphore[CLIENT] = sem_open(client_sem_name.c_str(), O_CREAT, S_IRUSR | S_IWUSR, 0);
 
     if (SEM_FAILED == m_name_semaphore[WATCH_DOG] || SEM_FAILED == m_name_semaphore[CLIENT])
     {
@@ -191,8 +200,8 @@ int LifeChecker::wait_for_partner(void)
     // TODO: mot sure about this if statemnt
     if (m_partner_exec_name == file_name)
     {
-        sem_unlink(watch_dog_sem.c_str());
-        sem_unlink(client_sem.c_str());
+        sem_unlink(watch_dog_sem_name.c_str());
+        sem_unlink(client_sem_name.c_str());
     }
 
     return (SUCCESS);
@@ -257,17 +266,18 @@ void LifeChecker::siguser1_handler(int signal_number,
                    siginfo_t *sending_signal_info,
                    void *data)
 {
-
+    UNUSED(data);
+    //data
     // a single received from the partner so he is a live and 
     // revive_threshold is reset to defult value.
 
     revive_threshold = 5;
     std::cout << "process " 
                 << getpid()
-                << "got signal number "
+                << " got signal number "
                 << signal_number
-                << sending_signal_info->si_signo
-                << data
+                << " from process id "
+                << sending_signal_info->si_pid
                 << std::endl;
 }
 
@@ -276,12 +286,13 @@ void LifeChecker::siguser2_handler(int signal_number,
                 siginfo_t *sending_signal_info,
                 void *data)
 {
+    UNUSED(data);
     std::cout << "process " 
                 << getpid()
-                << "got signal number "
+                << " got signal number "
                 << signal_number
-                << sending_signal_info->si_signo
-                << data
+                << " from process id "
+                << sending_signal_info->si_pid
                 << std::endl;
 }
 

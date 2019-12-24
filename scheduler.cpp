@@ -65,7 +65,7 @@ Scheduler::remove_task(std::shared_ptr<STask<size_t>> task_to_remove)
 /*                                                           execute_schedule */
 /*                                                           ~~~~~~~~~~~~~~~~ */
 int Scheduler::execute_schedule()
-{
+{              
     std::shared_ptr<STask<size_t>> temp_task_handle = nullptr;
 
     size_t queue_size = this->get_number_of_tasks();

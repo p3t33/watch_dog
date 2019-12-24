@@ -8,7 +8,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 9.12.19
-* Last update: 10.12.19
+* Last update: 24.12.19
 *******************************************************************************/
 
 
@@ -37,13 +37,16 @@ class WatchDog
     enum semaphore_type {CLIENT, WATCH_DOG};
     static const size_t buffer_size = 50;
 
+    static const std::string watch_dog_environment_variable_name;
+    static const std::string watch_dog_executable_name;
+
     public:
         WatchDog(char *client_args[]);
 
 
         // Interface / API
         // ---------------------------------------------------------------------
-        int keep_me_alive();
+        void keep_me_alive();
         void let_me_die();
 
 

@@ -5,7 +5,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 22.12.19
-* Last update: 22.12.19
+* Last update: 24.12.19
 *******************************************************************************/
 
 #include <stdio.h> /* printf */
@@ -13,15 +13,29 @@
 #include <iostream> // std::cout
 #include "./include/watch_dog.hpp" 
 
-
+/*============================================================================*/
+/*                                                                     Colors */
+/*                                                                     ~~~~~~ */
+const char* const green = "\033[1;32m";
+const char* const red = "\033[1;31m";
+const char* const reset = "\033[0m"; 
+const char* const blue = "\033[1;34m";
+/*============================================================================*/
 using namespace med;
 
 #define UNUSED(x) (void)(x)
 
 int main(int argc, char *argv[])
 {
+    std::cout << green  << std::endl 
+              <<"======== client.out started runing ========" << std::endl
+              << "client PID " << getpid() << std::endl
+              << "==========================================="
+              << reset << std::endl;
+              
 	int counter = 0;
     UNUSED(argc);
+
 
     WatchDog watch_dog(argv);
 

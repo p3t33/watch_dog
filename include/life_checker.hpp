@@ -8,7 +8,7 @@
 * #Version: V 1.0
 * Writer: Kobi Medrish       
 * Created: 10.12.19
-* Last update: 11.12.19
+* Last update: 24.12.19
 *******************************************************************************/
 
 
@@ -39,8 +39,6 @@
 namespace med
 {
 
-//TODO: without the static I have multiply definition.
-
 class LifeChecker
 {
     private:
@@ -57,8 +55,9 @@ class LifeChecker
 
     // used to store file and named semaphores names.
     static const std::string file_name;
-    static const std::string watch_dog_sem;
-    static const std::string client_sem;
+    static const std::string watch_dog_sem_name;
+    static const std::string client_sem_name;
+
 
     public:
         LifeChecker(pid_t partner_pid,
@@ -101,8 +100,6 @@ class LifeChecker
         static void siguser2_handler(int signal_number,
                         siginfo_t *sending_signal_info,
                         void *data);
-
-        
 
 
         // managing variables
