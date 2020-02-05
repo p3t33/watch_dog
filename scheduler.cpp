@@ -89,7 +89,12 @@ int Scheduler::execute_schedule()
             return (0);
         } 
 
-        sleep(m_pqueue.peek()->get_time_to_execute() - time(nullptr));
+        auto time_until_execution = m_pqueue.peek()->get_time_to_execute() - time(nullptr);
+
+        if (time_until_execution > 0)
+        {
+            sleep(time_until_execution);
+        }
 
         /* Task to be executed is removed from the queue and executed*/
         temp_task_handle = m_pqueue.dequeue();
